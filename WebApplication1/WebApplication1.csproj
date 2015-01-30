@@ -71,6 +71,7 @@
     <Content Include="WSLCO.asmx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Global.cs" />
     <Compile Include="ProcesoLCO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WSLCO.asmx.cs">

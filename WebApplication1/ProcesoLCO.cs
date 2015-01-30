@@ -20,10 +20,9 @@ namespace WebApplication1
     {
         
         List<Contribuyente> _lista;
+        Global g = new Global();
 
         public void Main() {
-            Global g = new Global();
-
             string[] dwFiles = new string[4] { "A1.gz", "A2.gz", "A3.gz", "A4.gz" };
             string[] XMLFiles = new string[4] { "A1.xml", "A2.xml", "a3.xml", "a4.xml" };
             string[] XMLFiles1 = new string[4] { "lco1.xml", "lco2.xml", "lco3.xml", "lco4.xml" };
