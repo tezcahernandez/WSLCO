@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dowload.cs" />
+    <Compile Include="ExecuteCMD.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="ProcesoLCO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

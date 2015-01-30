@@ -9,16 +9,13 @@ using System.Configuration;
 namespace WebApplication1
 {
     public class ExecuteCMD {
-         
-        string DirPath;
-        Global messages;
+        Global g;
         
-        public ExecuteCMD(string path){
-            DirPath = path;
-            messages = new Global();
+        public ExecuteCMD(){
+            g = new Global();
         }
 
-        public bool ExecuteCommand(string _Command) {
+        bool ExecuteCommand(string _Command) {
             try
             {
                 ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd", "/c " + @_Command);
@@ -32,22 +29,22 @@ namespace WebApplication1
                 return true;
             }
             catch (Exception e){
-                messages.WriteLog("ERROR", "Exec Command " + e.Message);
+                g.WriteLog("ERROR", "Exec Command " + e.Message);
             }
-            messages.ChangeState(false);
+            g.ChangeState(false);
             return false;
         }
 
-        bool CleaningFiles(string[] xml, string[] nombres)
+       public bool CleaningFiles(string[] xml, string[] nombres)
         {
             Thread.Sleep(1000);
             string DirOpenSSL = ConfigurationManager.AppSettings["Ruta"];
             for (int i = 0; i < xml.Length; i++)
             {
-                string cmd = DirOpenSSL + "openssl smime -decrypt -verify -inform DER -in " + DirPath + xml[i] + " -noverify -out " + DirPath + nombres[i];
+                string cmd = DirOpenSSL + "openssl smime -decrypt -verify -inform DER -in " + g.DirPath + xml[i] + " -noverify -out " + g.DirPath + nombres[i];
                 if (!ExecuteCommand(cmd))
                 {
-                    messages.ChangeState(false);
+                    g.ChangeState(false);
                     return false;
                 }
             }

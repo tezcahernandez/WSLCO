@@ -38,7 +38,8 @@ namespace WebApplication1
             if (!zip.unzipFiles(dwFiles)) return;
 
             g.WriteLog("STEP", "clean");
-            if(!CleaningFiles(XMLFiles, XMLFiles1)) return;
+            ExecuteCMD cleaningXML = new ExecuteCMD();
+            if (!cleaningXML.CleaningFiles(XMLFiles, XMLFiles1)) return;
 
             g.WriteLog("STEP", "xmlwrite");
             foreach(string fPath in XMLFiles1){
