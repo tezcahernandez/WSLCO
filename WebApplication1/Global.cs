@@ -8,7 +8,7 @@ namespace WebApplication1
 {
     public class Global
     {
-        string DirPath;
+        public string DirPath;
         public Global(){
             DirPath = HostingEnvironment.ApplicationPhysicalPath;
             DirPath += @"Files\";

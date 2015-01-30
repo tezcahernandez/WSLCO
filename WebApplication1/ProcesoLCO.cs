@@ -19,9 +19,10 @@ namespace WebApplication1
     public class ProcesoLCO
     {
         
-        List<Contribuyente> _lista;
         Global g = new Global();
-
+        public string DirPath;
+        List<Contribuyente> _lista;
+        UnZip zip = new UnZip();
         public void Main() {
             string[] dwFiles = new string[4] { "A1.gz", "A2.gz", "A3.gz", "A4.gz" };
             string[] XMLFiles = new string[4] { "A1.xml", "A2.xml", "a3.xml", "a4.xml" };
@@ -33,7 +34,7 @@ namespace WebApplication1
             if (!DownloadFiles(dwFiles)) return;
 
             g.WriteLog("STEP", "unzip");
-            if(!unzipFiles(dwFiles))return;
+            if (!zip.unzipFiles(dwFiles)) return;
 
             g.WriteLog("STEP", "clean");
             if(!CleaningFiles(XMLFiles, XMLFiles1)) return;
@@ -68,30 +69,6 @@ namespace WebApplication1
             }
             g.ChangeState(false);
             return false;
-        }
-        bool unzipFiles(string[] nombres)
-        {
-            
-            for (int i = 0; i < nombres.Length; i++)
-            {
-                try
-                {
-                    FileInfo archivo = new FileInfo(g.DirPath + nombres[i]);
-                    FileStream ArchivoOriginal = archivo.OpenRead();
-                    string NombreArchivo = archivo.FullName;
-                    string NuevoNombre = NombreArchivo.Remove(NombreArchivo.Length - archivo.Extension.Length);
-                    FileStream ArchivoDescomprimido = File.Create(NuevoNombre + ".xml");
-                    GZipStream Descomprimir = new GZipStream(ArchivoOriginal, CompressionMode.Decompress);
-                    Descomprimir.CopyTo(ArchivoDescomprimido);
-                }
-                catch (Exception e)
-                {
-                    g.WriteLog("ERROR","Unzip " + e.Message);
-                    g.ChangeState(false);
-                    return false;
-                }
-            }
-            return true;
         }
         bool ExecuteCommand(string _Command)
         {
@@ -169,7 +146,6 @@ namespace WebApplication1
             }
             return true;
         }
-        
         bool LoadXML2List(string file)
         {
             Contribuyente Persona;
