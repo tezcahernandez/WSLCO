@@ -20,9 +20,8 @@ namespace WebApplication1
     {
         
         Global g = new Global();
-        public string DirPath;
         List<Contribuyente> _lista;
-        UnZip zip = new UnZip();
+        
         public void Main() {
             string[] dwFiles = new string[4] { "A1.gz", "A2.gz", "A3.gz", "A4.gz" };
             string[] XMLFiles = new string[4] { "A1.xml", "A2.xml", "a3.xml", "a4.xml" };
@@ -31,9 +30,11 @@ namespace WebApplication1
             g.WriteLog("STEP", "START");
 
             g.WriteLog("STEP", "dw");
-            if (!DownloadFiles(dwFiles)) return;
+            dowload down = new dowload();
+            if (!down.DownloadFiles(dwFiles)) return;
 
             g.WriteLog("STEP", "unzip");
+            UnZip zip = new UnZip();
             if (!zip.unzipFiles(dwFiles)) return;
 
             g.WriteLog("STEP", "clean");
@@ -48,28 +49,7 @@ namespace WebApplication1
             if (!spExecute("spExecuteBULK")) return;
             g.WriteLog("STEP", "DONE");
         }
-        bool DownloadFiles(string[] nombres)
-        {
-            string _url = @"http://www.gestionix.com/Zip/";
-            using (WebClient ClienteWeb = new WebClient())
-            {
-                try
-                {
-                    for (int i = 0; i < nombres.Length; i++)
-                    {
-                        ClienteWeb.Proxy = null;
-                        ClienteWeb.DownloadFile(_url + nombres[i], DirPath + nombres[i]);
-                    }
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    g.WriteLog("ERROR", "Download "+ex.Message);
-                }
-            }
-            g.ChangeState(false);
-            return false;
-        }
+        
         bool ExecuteCommand(string _Command)
         {
             try
@@ -97,7 +77,7 @@ namespace WebApplication1
             string DirOpenSSL = ConfigurationManager.AppSettings["Ruta"];
             for (int i = 0; i < xml.Length; i++)
             {
-                string cmd = DirOpenSSL + "openssl smime -decrypt -verify -inform DER -in " + DirPath + xml[i] + " -noverify -out " + DirPath + nombres[i];
+                string cmd = DirOpenSSL + "openssl smime -decrypt -verify -inform DER -in " + g.DirPath + xml[i] + " -noverify -out " + g.DirPath + nombres[i];
                 if (!ExecuteCommand(cmd)) 
                 { 
                     g.ChangeState(false); 
